@@ -13,8 +13,8 @@
 \section*{Question 1}
 Code for all questions provided in the appendix.
 \subsection*{Part a}
-Reading in the data was done using the provided code. I mapped the data using
-standardisation:
+Reading in the data was done using code provided in the assignment (using the pandas package).
+I mapped the data using standardisation:
 
 \begin{equation*}
     x_{j} = \frac{x_{j} - \mu_{j}}{\sigma_{j}} 
@@ -29,8 +29,6 @@ and
 \end{equation*}
 
 This aims to make the mean of the dataset 0 and the standard deviation 1.
-I chose to use standardisation instead of the normalisation method as it seemed to give me a
-set of integers for the set of features x (ranging from -1 to 1).
 Standardisation in this case gives me values in 
 range -1.7 to 1.7 for both features x and outputs y which is good enough for me to work with.
 
@@ -49,7 +47,9 @@ Gradient descent is done by repeating the following set of steps:
 \end{equation*}
 
 Where $\theta_{i}$ is the coefficient for a feature $x^{(i)}$, $\alpha$ is the learning rate
-and m is the amount of datapoints. Finally, $h(x) = \theta^{T}x$ is our model.
+and m is the amount of datapoints. Finally, $h(x) = \theta^{T}x$ is our model. This enables us to
+retrieve a set of coefficients $\theta_{0}$ and $\theta_{1}$ which minimise the cost function (to a local minimum),
+thus making the predictions of the model more accurate. 
 
 For this part of the exercise I decided to execute this algorithm 200 times to get an overview of its performance.
 
@@ -61,23 +61,26 @@ I chose to use 1000 iterations in this case as I thought it made a more
 interesting plot to look at, given that the cost function is still going down after
 1000 iterations with a learning rate of 0.1.
 
-As expected, in this case the bigger the learning rate, the faster the cost function
-gets reduced using gradient descent.
+In this case the bigger the learning rate, the faster the cost function
+gets reduced using gradient descent. The values are obtained by computing the cost function
+for every iteration of the gradient descent using the current set of coefficients $\theta_{0}$ and
+$\theta_{1}$. 
 
 
 \vspace{5mm} %5mm vertical space
 \includegraphics[scale=0.23]{Figure_1.png}
 
 \subsection*{ii.}
-After training the linear regression model we obtain the following coefficients:
-$\theta_{0} = -2.5002977321421088e-17$, $\theta_{1} = 0.8797086791404171$. 
+After training the linear regression model we obtain the following parameter values:
+$\theta_{0} = -2.5002977321421088e-17$; $\theta_{1} = 0.8797086791404171$. 
 This gives us the linear model:
 \begin{equation*}
     h_{\theta}(x) = \theta_{0} + \theta_{1}x \approx 0 + 0.8797 * x \approx 0.8797x
 \end{equation*}
 
 \subsection*{iii.}
-I chose the mean $\mu$ as the constant value of the baseline model.
+I chose the mean $\mu$ as the constant value of the baseline model as it will reduce the cost function 
+as much as possible.
 We obtain the following results:
 
 Baseline model:
@@ -85,16 +88,18 @@ Baseline model:
     J(\theta_{0}, \theta_{1}) = \frac{1}{m}\sum_{i=1}^{m}(h_{\theta}(x^{(i)}) - y^{(i)})^{2} = 0.9999999999999989 \approx 1
 \end{equation*}
 
-Trained model:
+Trained model (using $\alpha = 0.5$ and 1000 iterations):
 \begin{equation*}
     J(\theta_{0}, \theta_{1}) = 0.4123744218292116 \approx 0.4124
 \end{equation*}
 
 Our goal is to minimise the cost function $J(\theta_{0}, \theta_{1})$. In this case we notice that there is 
-a considerable difference between both values of approximately $0.5876$ (note that values are standardised).
+a considerable difference between both values of approximately $0.5876$ (note that values are standardised
+thus it makes for an important increase in precision).
 
 \subsection*{iv.}
-Using a linear regression model with sklearn, we obtain the following values:
+Using sklearn, we split the features and outputs of the dataset into two categories, training and testing sets. We then create a 
+linear model with which we train our model using the training data. We can then extract the following parameters:
 
 \begin{equation*}
     h_{\theta}(x) = 0.00648141 + 0.94980041x \approx 0.0065 + 0.9498x
@@ -129,7 +134,6 @@ def get_median(value):
 
 
 def cost_function(x, y, coef1, coef2):
-    # Computes the sum part for the gradient descent algorithm
     length = len(x)
     current_sum = 0
     for i in range(length):
@@ -189,6 +193,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import math
+# Import our custom functions from the utils file
 from util import get_median, scaling_factor, cost_function, gradient_descent
 from sklearn.linear_model import LinearRegression
 from sklearn import preprocessing
@@ -221,7 +226,7 @@ for i in range(length):
     normalised = (value - median) / scaling
     y[i][0] = normalised
 
-# For Q1 use 200 iterations and 0.1 learning rates
+# For Q1 use 200 iterations and 0.1 learning rate
 nb_iterations = 200
 coefs = gradient_descent(x, y, 0.1, nb_iterations)
 
@@ -243,7 +248,8 @@ plt.plot(xaxis, coefs_1["deltas"], color='orange', linewidth=3)
 plt.xlabel("iteration")
 plt.ylabel("cost function")
 plt.legend(["learning rate: 0.001", "learning rate: 0.01", "learning rate: 0.1"])
-# Plot is shown at the end of program executiong as it blocks execution otherwise.
+# Plot is shown at the end of program executiong 
+# as it blocks execution otherwise.
 
 # Q2 ii: use learning rate of 0.5
 coefs_05 = gradient_descent(x, y, 0.5, nb_iterations)

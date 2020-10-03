@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import math
+# Import our custom functions from the utils file
 from util import get_median, scaling_factor, cost_function, gradient_descent
 from sklearn.linear_model import LinearRegression
 from sklearn import preprocessing

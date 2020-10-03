@@ -15,7 +15,6 @@ def get_median(value):
 
 
 def cost_function(x, y, coef1, coef2):
-    # Computes the sum part for the gradient descent algorithm
     length = len(x)
     current_sum = 0
     for i in range(length):
