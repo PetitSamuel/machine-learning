@@ -56,7 +56,7 @@ means = []
 variances = []
 num_folds = 10
 # Using a range of Cs between 1 and 75, with a 5 increment per step.
-C_range = np.arange(1, 75, 5)
+C_range = np.arange(0.01, 75, 5)
 for C in C_range:
     # Split the dataset in 10 folds
     kf = KFold(n_splits=num_folds)

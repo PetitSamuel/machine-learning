@@ -27,7 +27,7 @@ poly = PolynomialFeatures(5)
 X_poly = poly.fit_transform(X)
 # Generate the [-5,5] grid for predictions.
 Xtest = []
-grid = np.linspace(-5, 5)
+grid = np.linspace(-1.3, 1.3)
 for i in grid:
     for j in grid:
         Xtest.append([i, j])
@@ -57,15 +57,15 @@ for C in [1, 200, 5000]:
     # Plot model predictions.
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(Xtest[:, 0], Xtest[:, 1], ypred, color="red", alpha=0.2)
     ax.plot_trisurf(X[:, 0], X[:, 1], y)
-    ax.scatter(Xtest[:, 0], Xtest[:, 1], ypred, color="red")
     ax.set_xlabel('X1', color='blue', size=15)
     ax.set_ylabel('X2', color='blue', size=15)
     ax.set_zlabel('Y', color='blue', size=15)
-    ax.set_title("Lasso Predictions over [-5, 5] Grid, C = " + str(C))
+    ax.set_title("Lasso Predictions over [-1.3, 1.3] Grid, C = " + str(C))
 
 # Question e - Ridge Model
-for C in [1, 200, 5000]:
+for C in [0.00001, 1, 200]:
     # Note that alpha = 1 / 2C for Ridge regression
     model = Ridge(alpha=(1/(2 * C)))
     model.fit(X_poly, y)
@@ -77,10 +77,10 @@ for C in [1, 200, 5000]:
     # Plot model predictions.
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(Xtest[:, 0], Xtest[:, 1], ypred, color="red")
+    ax.scatter(Xtest[:, 0], Xtest[:, 1], ypred, color="red", alpha=0.2)
     ax.plot_trisurf(X[:, 0], X[:, 1], y)
     ax.set_xlabel('X1', color='blue', size=15)
     ax.set_ylabel('X2', color='blue', size=15)
     ax.set_zlabel('Y', color='blue', size=15)
-    ax.set_title("Ridge Predictions over [-5, 5] Grid, C = " + str(C))
+    ax.set_title("Ridge Predictions over [-1.3, 1.3] Grid, C = " + str(C))
 plt.show()
