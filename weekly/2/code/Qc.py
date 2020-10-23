@@ -5,6 +5,8 @@ from util import get_data
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import PolynomialFeatures
+from sklearn import metrics
+import statistics
 
 # Read in data
 X1, X2, X, y, ytrain = get_data()
@@ -29,6 +31,19 @@ print("slope:", model.coef_)
 
 # Predict values
 ypred = np.sign(model.predict(X))
+
+# Create a baseline model which predicts the most common value
+# Find the most common value by getting the sign of the mean.
+baseline_model = np.sign(statistics.mean(y))
+# generate an array of same size as y filled with out baseline predictions
+y_baseline_pred = np.full((len(y), 1), baseline_model)
+
+# Compute percentage of accurace for each predictions
+accuracy_model = metrics.accuracy_score(y, ypred)
+accuracy_base = metrics.accuracy_score(y, y_baseline_pred)
+# Print outputs
+print("base model accuracy score: ", accuracy_base,
+      " - trained model accuracy score: ", accuracy_model)
 
 # Plot the preditions
 plt.rc('font', size=20)
