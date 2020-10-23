@@ -26,13 +26,13 @@ points_y = [(line_w[0]*x+line_bias)/(-1*line_w[1]) for x in X1]
 # Plot the preditions
 plt.rc('font', size=20)
 pos = plt.scatter(X1[y > 0], X2[y > 0],
-                  color='black', marker=".")
+                  color='black', marker=".", linewidths=10)
 neg = plt.scatter(X1[y < 0], X2[y < 0],
-                  color='green', marker=".")
+                  color='green', marker=".", linewidths=10)
 pos_pred = plt.scatter(X1[ypred > 0], X2[ypred > 0],
-                       color='red', marker="+")
+                       color='red', marker="+", linewidths=7)
 neg_pred = plt.scatter(X1[ypred < 0], X2[ypred < 0],
-                       color='blue', marker="+")
+                       color='blue', marker="+", linewidths=7)
 plt.rcParams['figure.constrained_layout.use'] = True
 plt.xlabel("X1 (first feature)")
 plt.ylabel("X2 (second feature)")
