@@ -17,20 +17,22 @@ X2 = df.iloc[:, 1]
 X = np.column_stack((X1, X2))
 y = np.array(df.iloc[:, 2])
 # Compute polynomials
-poly = PolynomialFeatures(3)
+poly = PolynomialFeatures(1)
 X_poly = poly.fit_transform(X)
+
+print("printing in order: tn, fp, fn, tp")
 
 # Train our models
 knnModel = KNeighborsClassifier(
     n_neighbors=1, weights='uniform').fit(X, y)
 knn_pred = knnModel.predict(X)
 tn, fp, fn, tp = confusion_matrix(y, knn_pred).ravel()
-print(tn, fp, fn, tp)
+print("knn model", tn, fp, fn, tp)
 
-lgModel = LogisticRegression(solver='liblinear', C=18).fit(X_poly, y)
+lgModel = LogisticRegression(C=1).fit(X_poly, y)
 lg_pred = lgModel.predict(X_poly)
 tn, fp, fn, tp = confusion_matrix(y, lg_pred).ravel()
-print(tn, fp, fn, tp)
+print("logistic regression model: ", tn, fp, fn, tp)
 
 randomModel = DummyClassifier(strategy="uniform")
 mostFreqModel = DummyClassifier(strategy="most_frequent")
@@ -41,15 +43,16 @@ mostFreqModel.fit(X, y)
 # Random
 rqndom_pred = randomModel.predict(X)
 tn, fp, fn, tp = confusion_matrix(y, rqndom_pred).ravel()
-print(tn, fp, fn, tp)
+print("random model: ", tn, fp, fn, tp)
 
 # Uniform
 most_freq_pred = mostFreqModel.predict(X)
 tn, fp, fn, tp = confusion_matrix(y, most_freq_pred).ravel()
-print(tn, fp, fn, tp)
+print("most freq value model: ", tn, fp, fn, tp)
 
-# knn roc
+# logistic roc
 fpr, tpr, _ = roc_curve(y, lgModel.decision_function(X_poly))
+# knn roc
 knn_proba = knnModel.predict_proba(X)
 knn_fpr, knn_tpr, thresh = roc_curve(y, knn_proba[:, 1])
 

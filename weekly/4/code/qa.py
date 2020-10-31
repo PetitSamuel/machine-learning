@@ -104,7 +104,7 @@ ax.legend(loc='lower right')
 C_values = [1, 8, 35]
 scores = []
 for C in C_values:
-    poly = PolynomialFeatures(4)
+    poly = PolynomialFeatures(2)
     X_poly = poly.fit_transform(X)
     model = LogisticRegression(
         solver='liblinear', penalty='l2', C=C).fit(X_poly, y)
