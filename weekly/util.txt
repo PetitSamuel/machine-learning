@@ -1,0 +1,20 @@
+\begin{lstlisting}
+
+\end{lstlisting}
+
+\begin{figure}[H]    
+    \fbox{\includegraphics[scale=0.15]{Figure_1.png}}   
+    \fbox{\includegraphics[scale=0.15]{ds_1_pred_c_1.png}}   
+    \fbox{\includegraphics[scale=0.15]{ds_1_pred_c_8.png}}
+    \fbox{\includegraphics[scale=0.15]{ds_1_pred_c_25.png}}
+\end{figure}
+\begin{center}
+    \includegraphics[scale=0.25]{ds_1_knn_cv.png}
+\end{center}
+\vspace{5mm} %5mm vertical space
+
+
+\begin{center}
+    \includegraphics[scale=0.25]{roc_2.png}
+\end{center}
+\vspace{5mm} %5mm vertical space

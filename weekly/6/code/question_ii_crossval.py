@@ -6,6 +6,7 @@ from sklearn.neighbors import KNeighborsRegressor
 import numpy as np
 import pandas as pd
 import statistics
+from sklearn import metrics
 
 df = pd.read_csv("week6.csv", comment='#')
 Xtrain = np.array(df.iloc[:, 0])
@@ -112,5 +113,17 @@ fig.legend(["kNN", "KernelRidge", "baseline", "train"],
            fontsize=15)
 ax.set_title(
     "kNN & KernelRidge Predictions", fontsize=20)
+
+
+# Compute percentage of accuracy for each predictions
+knn_accuracy = knn.score(Xtrain, ytrain)
+kridge_accuracy = kridge.score(Xtrain, ytrain)
+baseline_accuracy = dummy.score(Xtrain, ytrain)
+
+
+# Print outputs
+print("base model accuracy score: ", baseline_accuracy,
+      " - knn model accuracy score: ", knn_accuracy,
+      " - kridge accuracy: ", kridge_accuracy)
 
 plt.show()
