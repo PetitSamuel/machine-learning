@@ -43,7 +43,7 @@ ax.legend(loc='lower right')
 plt.rcParams['figure.constrained_layout.use'] = True
 plt.rc('font', size=18)
 
-V_range = range(0, 30, 2)
+V_range = range(0, 30, 1)
 scores = []
 temp = []
 for V in V_range:
@@ -65,7 +65,7 @@ plt.rc('font', size=18)
 
 
 V = 4
-C_range = np.linspace(0.1, 15, num=10)
+C_range = np.linspace(0.1, 15, num=30)
 scores = []
 temp = []
 for C in C_range:
@@ -96,8 +96,6 @@ kridge = KernelRidge(kernel='rbf', gamma=V, alpha=1.0/C).fit(Xtrain, ytrain)
 
 dummy = DummyRegressor().fit(Xtrain, ytrain)
 
-# TODO : plot predictions for both
-# compare scorewith baseline model
 fig = plt.figure()
 ax = fig.add_subplot(111)
 red = ax.scatter(Xtrain, ytrain, color='red', marker='+')

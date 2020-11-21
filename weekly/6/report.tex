@@ -202,7 +202,68 @@ We obtain the following plots:
     \fbox{\includegraphics[scale=0.2]{2_kride_gamma_25.png}}
 \end{figure}
 
+
+We notice the same trend as with the kNN model, the more we increase $\gamma$, the more our predictions fit our 
+data (and thus its noise), however the main different we notice is in its behavior outside of the training range,
+we notice that while the kNN models predicted almost flat negative values, this model moves back up and also becomes
+flat, but close to $y = 0$. We could see how depending on our use case we could prefer one or the other model to
+make accurate predictions. 
+
 \subsection*{Part c}
+Starting with selecting a $\gamma$ value for our kNN model. We use the exact same method for training it as previously
+explained, the main difference being that I used a range of values going from 0 to 12, I've found that extending this further
+did not provide any value as to making our decision. Then, for each trained model, we keep its score and mean squared error such
+as to use them when plotting our cross-validation graph.
+
+\begin{lstlisting}
+    scores.append(model.score(Xtrain, ytrain))
+    temp.append(mean_squared_error
+                (ytrain, model.predict(Xtrain)))
+\end{lstlisting}
+
+Then, the actual plotting is quite simple, it only involves using the data from above inside an errorbar from the plotting
+library. We obtain the following plot:
+
+\begin{center}
+    \includegraphics[scale=0.27]{knn_crossval.png}
+\end{center}
+
+We notice clear improvements in the mean squared error mostly as we start increasing $\gamma$, it seems
+to start settling around $\gamma = 7$. We also notice a bit of an increase in model scores in the range 
+$[0, 3]$ however that also setles and remains fairly constant. We will pick a value of $\gamma = 8$ for the
+kNN model which seems to be where our values stabilise and give us the best predictions.
+
+Let's now look at the kernalised ridge regression model. We will first do a cross-validation of the $\gamma$ value.
+We do so in the exact same manner, except that we use a range of C values this time, I chose to use a range between
+$[0, 30]$. We obtain the following cross-validation plot:
+
+\begin{center}
+    \includegraphics[scale=0.27]{kridge_crossval_gamma.png}
+\end{center}
+
+We notice some fluctuations in both score and mean squared error, which seems to stabilise once we reache about
+$\gamma = 3$. I've decided to use $\gamma = 4$ for this model as it seemed that increasing it more did not make
+a particularity positive impact on predictions.
+
+Finaly, using $\gamma = 4$ for this kernalised ridge model, we can now do a cross-validation of the C value (remember that 
+$\alpha = 1 / C$) using the same techniques but varying C this time, I've chosen to use the range of $[0.1, 15]$ with 
+a total of 30 evenly values evenly spaced within that range.
+
+\begin{center}
+    \includegraphics[scale=0.27]{kridge_crossval_c.png}
+\end{center}
+
+We notice quite a similar trend, with some fluctuation towards the first part of that plot and stabilisation
+after a certain point, here we can use $C = 3$ such as to make our model give the most reliable predictions.
+
+We can now train both models using the values we identified, that is $\gamma = 8$ for the kNN model and 
+$\gamma = 4$, $C = 3$ for the kernalised ridge model. The final piece we need is a baseline model such as to
+know what to compare our models to, for this I've decided to train a simple DummyRegressor which uses the mean as a
+constant prediction. We then obtain the following predictions plot:
+
+\begin{center}
+    \includegraphics[scale=0.27]{optimised.png}
+\end{center}
 
 
 \section*{Appendix}
