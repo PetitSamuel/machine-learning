@@ -22,3 +22,12 @@ test accuracy: 0.53
 train accuracy: 0.75
 train time: 65.16124606132507
 total params: 87,018
+
+
+
+
+default: 
+num params: 37,146
+layer with most params: Dense step 20490
+accuracy : test: 0.50 train : 0.63
+baseline accuracy: 0.1 train & test
