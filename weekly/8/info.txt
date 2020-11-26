@@ -1,0 +1,24 @@
+5K: time 41.17s
+10k: 81.20799708366394s
+20k: 158.05100846290588
+40k: 307.8633327484131
+
+
+iv (using 5K):
+0.0001: test: 0.49 train: 0.62
+0.01: test: 0.44 train: 0.48
+0.1: test: 0.37 train: 0.38
+0.5: test: 0.29 train: 0.30
+0: test: 0.50 train: 0.65
+2: test: 0.1 train: 0.1
+10: test: 0.1 train: 0.1
+100: test: 0.1 train: 0.1
+
+
+max pooling:
+5k training data point 
+runtime 
+test accuracy: 0.53
+train accuracy: 0.75
+train time: 65.16124606132507
+total params: 87,018
