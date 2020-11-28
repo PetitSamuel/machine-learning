@@ -180,14 +180,47 @@ has an accuracy of 0.1 for both the test and train data. We can
 clearly confirm that our previous model is doing very well in comparison, with an accuracy increase of
 $0.5 - 0.1 = 0.4$ on the test data and $0.62 - 0.1 = 0.52$ on the test data.
 
-\subsubsection{Section ii}
+\subsubsection*{Section ii}
 The graph we obtain the history variable in the provided code is the following:
 
 \begin{center}
     \includegraphics[scale=0.3]{default_5k.png}
 \end{center}
 
+Looking at the second part of the graph which plots the loss on the y axis and epoch on the x axis
+can be used to make some observations about over and underfitting.
+We notice that during the first few epoch (training iterations)
+the loss reduces by a noticeable amount quite fast. We could say that
+the model was underfitting towards the start and started tuning more
+parameters as we increase the epoch number.
+
+However, we get to a point where the loss somewhat stabilises and starts tu fluctuate, becoming
+quite unpredictable (it seems to have a high variance). We notice a form of overfitting
+where we continue training the model and tuning parameters with no gain in the models performance.
+
 \section*{Appendix}
 
 
+\subsubsection*{Part iii}
+Training this same model using bigger amounts of training data
+points, I measure the training time and accuracy for each of these
+models. We obtain the following metrics:
+
+\vspace{5mm} %5mm vertical space
+
+\begin{table}
+\centering
+\begin{tabular}{llll}
+    Train size & Train time & Accuracy train & Accuracy test  \\
+    5K         & 41.17s     &                &                \\
+    10K        & 81.21s     &                &                \\
+    20K        & 158.01s    &                &                \\   
+    40K        & 307.86s    &                &               
+\end{tabular}
+\end{table}
 \end{document}
+
+5K: time 41.17s
+10k: 81.20799708366394s
+20k: 158.05100846290588
+40k: 307.8633327484131
