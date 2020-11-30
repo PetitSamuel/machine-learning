@@ -1,4 +1,3 @@
-
 import sys
 import time
 from sklearn.dummy import DummyRegressor
@@ -20,8 +19,10 @@ input_shape = (32, 32, 3)
 
 # the data, split between train and test sets
 (x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
-n=5000
-x_train = x_train[1:n]; y_train=y_train[1:n]
+# Update this line to change train size (5k,10k,20k,40k)
+n = 5000
+x_train = x_train[1:n]
+y_train = y_train[1:n]
 #x_test=x_test[1:500]; y_test=y_test[1:500]
 
 # Scale images to the [0, 1] range
@@ -35,56 +36,64 @@ y_test = keras.utils.to_categorical(y_test, num_classes)
 
 use_saved_model = False
 if use_saved_model:
-	model = keras.models.load_model("cifar.model")
+    model = keras.models.load_model("cifar.model")
 else:
-	model = keras.Sequential()
-	model.add(Conv2D(16, (3,3), padding='same', input_shape=x_train.shape[1:],activation='relu'))
-	# model.add(Conv2D(16, (3,3), strides=(2,2), padding='same', activation='relu'))
-	model.add(Conv2D(32, (3,3), padding='same', activation='relu'))
-	# model.add(Conv2D(32, (3,3), strides=(2,2), padding='same', activation='relu'))
-	model.add(MaxPooling2D((2,2)))
-	model.add(Dropout(0.5))
-	model.add(Flatten())
-	model.add(Dense(num_classes, activation='softmax',
-                 kernel_regularizer=regularizers.l1(0.0001)))
-	model.compile(loss="categorical_crossentropy", optimizer='adam', metrics=["accuracy"])
-	model.summary()
+    model = keras.Sequential()
+    model.add(Conv2D(16, (3, 3), padding='same',
+                     input_shape=x_train.shape[1:], activation='relu'))
+    model.add(Conv2D(16, (3, 3), strides=(2, 2), padding='same',
+                     activation='relu'))  # comment line for part ii c
+    model.add(Conv2D(32, (3, 3), padding='same', activation='relu'))
+    model.add(Conv2D(32, (3, 3), strides=(2, 2), padding='same',
+                     activation='relu'))  # comment line for part ii c
+    # Uncomment for part ii c
+    # model.add(MaxPooling2D((2,2)))
+    model.add(Dropout(0.5))
+    model.add(Flatten())
+    # Change l1 parameter for part b iv
+    model.add(Dense(num_classes, activation='softmax',
+                    kernel_regularizer=regularizers.l1(0.0001)))
+    model.compile(loss="categorical_crossentropy",
+                  optimizer='adam', metrics=["accuracy"])
+    model.summary()
 
-	batch_size = 128
-	epochs = 20
-	start = time.time()
-	history = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, validation_split=0.1)
-	end = time.time()
-	print("time spent training: ", end - start)
-	model.save("cifar.model")
-	plt.subplot(211)
-	plt.plot(history.history['accuracy'])
-	plt.plot(history.history['val_accuracy'])
-	plt.title('model accuracy')
-	plt.ylabel('accuracy')
-	plt.xlabel('epoch')
-	plt.legend(['train', 'val'], loc='upper left')
-	plt.subplot(212)
-	plt.plot(history.history['loss'])
-	plt.plot(history.history['val_loss'])
-	plt.title('model loss')
-	plt.ylabel('loss'); plt.xlabel('epoch')
-	plt.legend(['train', 'val'], loc='upper left')
-	plt.show()
+    batch_size = 128
+    epochs = 20
+    start = time.time()
+    history = model.fit(x_train, y_train, batch_size=batch_size,
+                        epochs=epochs, validation_split=0.1)
+    end = time.time()
+    print("time spent training: ", end - start)
+    model.save("cifar.model")
+    plt.subplot(211)
+    plt.plot(history.history['accuracy'])
+    plt.plot(history.history['val_accuracy'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'val'], loc='upper left')
+    plt.subplot(212)
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'val'], loc='upper left')
+    plt.show()
 
 print("Trained model: train data perf")
 preds = model.predict(x_train)
 y_pred = np.argmax(preds, axis=1)
 y_train1 = np.argmax(y_train, axis=1)
 print(classification_report(y_train1, y_pred))
-# print(confusion_matrix(y_train1,y_pred))
+print(confusion_matrix(y_train1, y_pred))
 
 print("Trained model: test data perf")
 preds = model.predict(x_test)
 y_pred = np.argmax(preds, axis=1)
 y_test1 = np.argmax(y_test, axis=1)
 print(classification_report(y_test1, y_pred))
-# print(confusion_matrix(y_test1,y_pred))
+print(confusion_matrix(y_test1, y_pred))
 
 # Dummy model
 dummy_model = DummyRegressor().fit(x_train, y_train)
@@ -94,13 +103,13 @@ print("Dummy model: train data perf")
 preds_dummy = dummy_model.predict(x_train)
 y_pred_dummy = np.argmax(preds_dummy, axis=1)
 y_pred_dummy1 = np.argmax(y_train, axis=1)
-# print(classification_report(y_pred_dummy1, y_pred_dummy))
-# print(confusion_matrix(y_pred_dummy1, y_pred_dummy))
+print(classification_report(y_pred_dummy1, y_pred_dummy))
+print(confusion_matrix(y_pred_dummy1, y_pred_dummy))
 
 print("Dummy model: test data perf")
 # Display test prediction performance
 preds_dummy = dummy_model.predict(x_test)
 y_pred_dummy = np.argmax(preds_dummy, axis=1)
 y_pred_dummy1 = np.argmax(y_test, axis=1)
-# print(classification_report(y_pred_dummy1, y_pred_dummy))
-# print(confusion_matrix(y_pred_dummy1, y_pred_dummy))
+print(classification_report(y_pred_dummy1, y_pred_dummy))
+print(confusion_matrix(y_pred_dummy1, y_pred_dummy))

@@ -19,12 +19,6 @@ def convolutional_layer(image, kernel):
     return result
 
 
-kernel = np.array([[1, 0, -1], [1, 0, -1], [1, 0, -1]])
-image = np.array([[1, 2, 3, 4, 5], [1, 3, 2, 3, 10],
-                  [3, 2, 1, 4, 5], [6, 1, 1, 2, 2], [3, 2, 1, 5, 4]])
-
-print(convolutional_layer(image, kernel))
-
 im = Image.open('triangle.PNG')
 rgb = np.array(im.convert('RGB'))
 r = rgb[:, :, 0]
@@ -34,5 +28,6 @@ kernel2 = np.array([[0, -1, 0], [-1, 8, -1], [0, -1, 0]])
 
 im_k1 = convolutional_layer(r, kernel1)
 im_k2 = convolutional_layer(r, kernel2)
-# Image.fromarray(np.uint8(im_k1)).show()
+
+Image.fromarray(np.uint8(im_k1)).show()
 Image.fromarray(np.uint8(im_k2)).show()
