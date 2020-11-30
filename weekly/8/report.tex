@@ -16,8 +16,11 @@
 \section*{Question i}
 \subsection*{Part a}
 In order to do so there are 2 problems to solve:
-- knowing how many iterations to apply the kernel within the image (for columns and rows)
-- For each iteration, compute the resulting value to place in the output
+
+\begin{itemize}
+    \item knowing how many iterations to apply the kernel within the image (for columns and rows)
+    \item For each iteration, compute the resulting value to place in the output
+\end{itemize}
 
 To do so, I start by computing both:
 \begin{equation*}
@@ -53,7 +56,7 @@ To do so, I iterate over the kernel matrix rows and columns such as to compute:
     output_{i,j} = \sum_{k = 0}^{\#kernel_{rows}}\sum_{l = 0}^{\#kernel_{columns}} kernel^{(k,l)} * image^{(i + k, j + l)}
 \end{equation*}
 
-That it, for each point in the kernel, we multiply it to its corresponding point (using the offset
+For each point in the kernel, we multiply it to its corresponding point in the image (using the offset
 of i and j), once we have done so for all kernel points we have the result value for the
 point ${i,j}$ of the output matrix.
 
@@ -110,7 +113,7 @@ Kernel 2:
     \includegraphics[scale=0.3]{ml_triangle_2.PNG}
 \end{center}
 
-\section{Question ii}
+\section*{Question ii}
 \subsection*{Part a}
 The downloaded code uses the following ConvNet code:
 \begin{lstlisting}
@@ -131,17 +134,17 @@ model.add(Dense(num_classes, activation='softmax',
 We notice a list of sequential steps are added, in order we find:
 
 \begin{itemize}
-    \item A 2D Convolution Layer which use 16 filters to learn from. a kernel size of 3x3,
+    \item A 2D Convolution Layer which uses 16 output filters. A kernel size of 3x3,
     it also uses padding such as to make outputs the same dimensions as the input, finally
     it also uses 'relu' validation (or rectified linear activation function 
-    ) is a method which will map the output to 0 if it is negative.
+    ) which is a method which will map negative output values to 0.
     \item We then find another 2D Convolution Layer with 16 filters,
     3x3 size, uses padding to keep the same output size and 'relu' activation. The
     difference being that it uses a Stride of size 2x2 such as to downsample
     (it determines how much the window moves by - the default being 1x1)
     \item We then find the exact same 2 steps as we've seen above, in the
     same order with the difference that the filter size is set to 32 instead of 16.
-    \item We then find a Droupout step, which sets randomly input values to 0
+    \item A Droupout step, which sets randomly input values to 0
     with a rate of 0.5 here. This helps to prevent overfitting. It will also
     update non-0 values such as to keep the sum of values consistent.
     \item We then have a Flatten step which simply maps the data to be flat
@@ -157,7 +160,7 @@ By simply running the program and reading the output from the
 console we find the metrics required by the question:
 
 \begin{itemize}
-    \item This model has a total of: 37,146 parameters
+    \item This model has a total of 37,146 parameters
     \item The layer with the most parameters is the Dense layer,
     which has 20,490 parameters.
     \item When I ran the code I found that the accuracy on the
@@ -184,7 +187,7 @@ $0.5 - 0.1 = 0.4$ on the test data and $0.62 - 0.1 = 0.52$ on the test data.
 The graph we obtain the history variable in the provided code is the following:
 
 \begin{center}
-    \includegraphics[scale=0.3]{default_5k.png}
+    \includegraphics[scale=0.23]{default_5k.png}
 \end{center}
 
 Looking at the second part of the graph which plots the loss on the y axis and epoch on the x axis
@@ -194,7 +197,7 @@ the loss reduces by a noticeable amount quite fast. We could say that
 the model was underfitting towards the start and started tuning more
 parameters as we increase the epoch number.
 
-However, we get to a point where the loss somewhat stabilises and starts tu fluctuate, becoming
+However, looking at larger epoch values, we get to a point where the loss somewhat stabilises and starts to fluctuate, becoming
 quite unpredictable (it seems to have a high variance). We notice a form of overfitting
 where we continue training the model and tuning parameters with no gain in the models performance.
 
@@ -221,7 +224,7 @@ it will result in greater accuracy values however a decision needs to be made as
 how much training is justified and when to stop training (when the accuracy improvements are
 not worth the additional training time). This will heavily depend on the use case, 
 perhaps for testing purposes less accuracy is OK, if this were to be used in a business
-or important application we likely will want to most accurate model possible.
+or important application we likely will want the most accurate model possible.
 
 We obtain the following plots of the "history" variable: 
 
@@ -260,7 +263,7 @@ recording the accuracy on the training and test data, we obtain the following me
 
 We notice interesting behaviors in accuracy in both test and train predictions
 as the loss parameter is varied.
-To start, we notice that as the loss parameterbecomes 2 or more there is a constant
+To start, we notice that as the loss parameter becomes 2 or more there is a constant
 accuracy in both the train and test data to be 0.1 - this is the same value we found in our
 dummy model which predicted the most frequent value earlier ! We can conclude a loss term over
 2 will make the weighting too big and cause this model to predict the most frequent value always.
@@ -312,7 +315,7 @@ we obtain the following values:
     \item Accuracy train: 0.75
 \end{itemize}
 
-Remeber that the original network using the same 5K training size and 0.0001
+Remember that the original network using the same 5K training size and 0.0001
 loss parameter had the following:
 
 \begin{itemize}
