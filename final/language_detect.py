@@ -60,9 +60,9 @@ with open('final_data', 'rb') as f:
 X, y, z = shuffle(X, y, z, random_state=0)
 
 # Use a sample data for faster tests
-X = X[:1500]
-y = y[:1500]
-z = z[:1500]
+X = X[:1000]
+y = y[:1000]
+z = z[:1000]
 
 # Split reviews into language groups
 reviews_by_language = {}
@@ -110,9 +110,9 @@ for lang in reviews_by_language.keys():
         # On tokeniser error, skip the language
         continue
     X = np.array(tokens.toarray())
-    y = np.array(reviews_by_language[lang]["y"])
+    # y = np.array(reviews_by_language[lang]["y"])
     # use this line instead of the above one for early access models
-    # y = np.array(reviews_by_language[lang]["z"])
+    y = np.array(reviews_by_language[lang]["z"])
 
     # Skip languages with less than 5 reviews
     if len(X) < 5:
@@ -229,9 +229,9 @@ for lang in reviews_by_language.keys():
         # ax.set_xlabel("C")
         # ax.set_title("C Cross-validation | LogisticRegression model")
 
-        # model_names.append(
-        #     "Logistic (C=" + str(best_logistic_accuracy[1]) + ")")
-        # model_accuracies.append(best_logistic_accuracy[0])
+        model_names.append(
+            "Logistic (C=" + str(best_logistic_accuracy[1]) + ")")
+        model_accuracies.append(best_logistic_accuracy[0])
 
         # kNN Model
     best_knn_accuracy = (-1, -1)
@@ -309,8 +309,8 @@ for lang in reviews_by_language.keys():
         # ax.set_xlabel("C")
         # ax.set_title("C Cross-validation | SVC model")
 
-        # model_names.append("SVC (C=" + str(best_svc_accuracy[1]) + ")")
-        # model_accuracies.append(best_svc_accuracy[0])
+        model_names.append("SVC (C=" + str(best_svc_accuracy[1]) + ")")
+        model_accuracies.append(best_svc_accuracy[0])
 
     bar_x_pos = [i for i, _ in enumerate(model_names)]
     fig = plt.figure()
