@@ -56,10 +56,10 @@ with open('final_data', 'rb') as f:
         y.append(item['voted_up'])
         z.append(item['early_access'])
 
-# Dataset has first 5000 reviews positive and next 5000 negative, shuffle values in unison
+# Dataset has first positive reviews and then negative (ordered), shuffle values in unison
 X, y, z = shuffle(X, y, z, random_state=0)
 
-# Use a sample data for faster tests
+# Use a sample of the data for faster tests
 X = X[:1000]
 y = y[:1000]
 z = z[:1000]
@@ -71,7 +71,7 @@ for index in range(len(X)):
     try:
         lang = detect(item)
     except:
-        # When language not detectable, use other
+        # When language not detectable, use "other"
         lang = 'other'
     if lang not in reviews_by_language:
         reviews_by_language[lang] = {
@@ -83,7 +83,7 @@ for index in range(len(X)):
     reviews_by_language[lang]["y"].append(y[index])
     reviews_by_language[lang]["z"].append(z[index])
 
-# Values are now stored in reviews_by_language
+# Values are now stored in reviews_by_language - clear some memory space
 X = []
 y = []
 z = []
@@ -96,9 +96,10 @@ for lang in reviews_by_language.keys():
     print("PROCESSING ", lang)
     stem_lang = get_stemmer_lang(lang)
     if stem_lang is None:
+        # Use default analyser if there is no matching stemmer for this language
         analyzer_for_lang = 'word'
     else:
-        print("Language has a specific stemmer")
+        # Language has a stemmer
         analyzer_for_lang = stemmed_words
         # Redefine stemmer with specified language
         stemmer = SnowballStemmer(stem_lang)
@@ -110,11 +111,12 @@ for lang in reviews_by_language.keys():
         # On tokeniser error, skip the language
         continue
     X = np.array(tokens.toarray())
-    # y = np.array(reviews_by_language[lang]["y"])
+    y = np.array(reviews_by_language[lang]["y"])
     # use this line instead of the above one for early access models
-    y = np.array(reviews_by_language[lang]["z"])
+    # y = np.array(reviews_by_language[lang]["z"])
 
-    # Skip languages with less than 5 reviews
+    # Skip languages with less than 5 reviews (not possible with k-fold)
+    # this may trigger depending on sampling size used
     if len(X) < 5:
         continue
 
@@ -122,7 +124,7 @@ for lang in reviews_by_language.keys():
     model_names = []
     model_accuracies = []
 
-    # Keep track of the best performing for the current language
+    # Keep track of the best performing model / accuracy for the current language
     curr_best = (None, -1, 'undefined language')
     # Decision Tree Model
     accuracies = []
@@ -180,14 +182,14 @@ for lang in reviews_by_language.keys():
         if avg_accuracy > best_ridge_accuracy[0]:
             best_ridge_accuracy = (avg_accuracy, alpha)
 
-    # # plot the CV
-    # fig = plt.figure()
-    # plt.rc('font', size=20)
-    # ax = fig.add_subplot(111)
-    # plt.errorbar(alpha_range, mean_error, yerr=std_error)
-    # ax.set_ylabel("Mean accuracy")
-    # ax.set_xlabel("Alpha")
-    # ax.set_title("Alpha Cross-validation | Ridge model")
+    # plot the CV
+    fig = plt.figure()
+    plt.rc('font', size=20)
+    ax = fig.add_subplot(111)
+    plt.errorbar(alpha_range, mean_error, yerr=std_error)
+    ax.set_ylabel("Mean accuracy")
+    ax.set_xlabel("Alpha")
+    ax.set_title("Alpha Cross-validation | Ridge model")
 
     model_names.append("Ridge (alpha=" + str(best_ridge_accuracy[1]) + ")")
     model_accuracies.append(best_ridge_accuracy[0])
@@ -219,15 +221,15 @@ for lang in reviews_by_language.keys():
         if avg_accuracy > best_logistic_accuracy[0]:
             best_logistic_accuracy = (avg_accuracy, C)
 
-    # if len(mean_error) > 0 and len(std_error) > 0:
-        # # plot the CV
-        # fig = plt.figure()
-        # plt.rc('font', size=20)
-        # ax = fig.add_subplot(111)
-        # plt.errorbar(C_range, mean_error, yerr=std_error)
-        # ax.set_ylabel("Mean accuracy")
-        # ax.set_xlabel("C")
-        # ax.set_title("C Cross-validation | LogisticRegression model")
+    if len(mean_error) > 0 and len(std_error) > 0:
+        # plot the CV
+        fig = plt.figure()
+        plt.rc('font', size=20)
+        ax = fig.add_subplot(111)
+        plt.errorbar(C_range, mean_error, yerr=std_error)
+        ax.set_ylabel("Mean accuracy")
+        ax.set_xlabel("C")
+        ax.set_title("C Cross-validation | LogisticRegression model")
 
         model_names.append(
             "Logistic (C=" + str(best_logistic_accuracy[1]) + ")")
@@ -262,14 +264,14 @@ for lang in reviews_by_language.keys():
         if avg_accuracy > best_knn_accuracy[0]:
             best_knn_accuracy = (avg_accuracy, k)
 
-    # # plot the CV
-    # fig = plt.figure()
-    # plt.rc('font', size=20)
-    # ax = fig.add_subplot(111)
-    # plt.errorbar(actual_k_range, mean_error, yerr=std_error)
-    # ax.set_ylabel("Mean accuracy")
-    # ax.set_xlabel("k")
-    # ax.set_title("k Cross-validation | kNN model")
+    # plot the CV
+    fig = plt.figure()
+    plt.rc('font', size=20)
+    ax = fig.add_subplot(111)
+    plt.errorbar(actual_k_range, mean_error, yerr=std_error)
+    ax.set_ylabel("Mean accuracy")
+    ax.set_xlabel("k")
+    ax.set_title("k Cross-validation | kNN model")
 
     model_names.append("kNN (k=" + str(best_knn_accuracy[1]) + ")")
     model_accuracies.append(best_knn_accuracy[0])
@@ -299,20 +301,20 @@ for lang in reviews_by_language.keys():
         if avg_accuracy > best_svc_accuracy[0]:
             best_svc_accuracy = (avg_accuracy, C)
 
-    # if len(mean_error) > 0 and len(std_error) > 0:
-        # # plot the CV
-        # fig = plt.figure()
-        # plt.rc('font', size=20)
-        # ax = fig.add_subplot(111)
-        # plt.errorbar(C_range, mean_error, yerr=std_error)
-        # ax.set_ylabel("Mean accuracy")
-        # ax.set_xlabel("C")
-        # ax.set_title("C Cross-validation | SVC model")
+    if len(mean_error) > 0 and len(std_error) > 0:
+        # plot the CV
+        fig = plt.figure()
+        plt.rc('font', size=20)
+        ax = fig.add_subplot(111)
+        plt.errorbar(C_range, mean_error, yerr=std_error)
+        ax.set_ylabel("Mean accuracy")
+        ax.set_xlabel("C")
+        ax.set_title("C Cross-validation | SVC model")
 
         model_names.append("SVC (C=" + str(best_svc_accuracy[1]) + ")")
         model_accuracies.append(best_svc_accuracy[0])
 
-    bar_x_pos = [i for i, _ in enumerate(model_names)]
+    # Plot comparison bar chart of all models for current language
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.bar(model_names, model_accuracies, color='green')
@@ -326,6 +328,7 @@ for lang in reviews_by_language.keys():
 
 dummy_accuracy, dummy_langs = zip(*dummy_models)
 
+# Plot performance of dummy model for all languages
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.bar(dummy_langs, dummy_accuracy, color='green')
@@ -333,6 +336,7 @@ ax.set_xlabel("Language")
 ax.set_ylabel("Accuracy")
 ax.set_title("Accuracies of Dummy models split per language")
 
+# Plot performance of best models for all languages
 models, accuracies, langs = zip(*best_models)
 fig = plt.figure()
 ax = fig.add_subplot(111)

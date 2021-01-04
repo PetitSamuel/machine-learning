@@ -207,6 +207,7 @@ ax.set_title("C Cross-validation | SVC model")
 model_names.append("SVC (C=" + str(best_svc_accuracy[1]) + ")")
 model_accuracies.append(best_svc_accuracy[0])
 
+# Plot bar chart to compare performance of all different models
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.bar(model_names, model_accuracies, color='green')
