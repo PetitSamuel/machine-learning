@@ -1,0 +1,12 @@
+to remember:
+
+- hyper parameter selection -- cross validation 
+- kfolds 
+- use a baseline model 
+
+
+2 approaches :
+
+splitting by language 
+all languages 
+
